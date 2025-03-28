@@ -2,8 +2,8 @@
 
 ## 參考網址
 
-1. [Phalcon 官方 Dockerfile]("https://github.com/phalcon/cphalcon/tree/master/docker")
-1. [Phalcon 版本 v3.4.5]("https://github.com/phalcon/cphalcon/releases/tag/v3.4.5")
+1. [Phalcon 官方 Dockerfile] https://github.com/phalcon/cphalcon/tree/master/docker
+1. [Phalcon 版本 v3.4.5] https://github.com/phalcon/cphalcon/releases/tag/v3.4.5
 
 ### 捷徑
 
