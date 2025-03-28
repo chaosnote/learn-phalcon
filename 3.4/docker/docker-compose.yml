@@ -1,0 +1,17 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - /home/chris/phalcon_docker/etc/nginx/conf.d:/etc/nginx/conf.d
+      - /home/chris/phalcon_docker/work:/var/www/html
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    image: phalcon:v3.4.5
+    volumes:
+      - /home/chris/phalcon_docker/work:/var/www/html
+    expose:
+      - "9000"
