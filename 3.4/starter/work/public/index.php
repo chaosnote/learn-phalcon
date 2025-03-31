@@ -11,6 +11,11 @@ use Phalcon\Cache\Frontend\Data as FrontendData;
 use Phalcon\Logger\Factory;
 use Phalcon\Flash\Direct as FlashDirect;
 
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager;
+use Phalcon\Mvc\Dispatcher;
+
+
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
@@ -27,21 +32,21 @@ $loader->registerDirs(
 $di = new FactoryDefault();
 
 // Setting up the view component
-$di['view'] = function() {
+$di['view'] = function () {
     $view = new View();
     $view->setViewsDir(APP_PATH . '/views/');
     return $view;
 };
 
 // Setup a base URI so that all generated URIs include the "tutorial" folder
-$di['url'] = function() {
+$di['url'] = function () {
     $url = new UrlProvider();
     $url->setBaseUri('/');
     return $url;
 };
 
 // Set the database service
-$di['db'] = function() {
+$di['db'] = function () {
     return new DbAdapter(array(
         "host"     => "mariadb",
         "username" => "chris",
@@ -51,7 +56,7 @@ $di['db'] = function() {
 };
 
 // Set redis service
-$di['redis_short'] = function() {
+$di['redis_short'] = function () {
     // 設置緩存期效(必需參數)
     $frontend = new FrontendData([
         'lifetime' => 86400, // 每天
@@ -68,7 +73,7 @@ $di['redis_short'] = function() {
     return $backend;
 };
 
-$di['logger'] = function($path){
+$di['logger'] = function ($path) {
     $options = [
         'name'    => $path,
         'adapter' => 'file',
@@ -93,6 +98,34 @@ $di->set(
     }
 );
 
+
+//
+// @see https://docs.phalcon.io/3.4/dispatcher/#dispatch-loop-events
+//   events
+// @see https://docs.phalcon.io/3.4/dispatcher/#camelize-action-names
+//   how to 
+//
+$di->set(
+    'dispatcher',
+    function () {
+        $eventsManager = new Manager();
+        $eventsManager->attach(
+            'dispatch:beforeDispatchLoop',
+            function (Event $event, Dispatcher $dispatcher){
+                // 回傳值
+                // return {true:不影響, false:中止<stop next>} 
+                echo "ControllerName :".$dispatcher->getControllerName()."<br/>" ;
+                echo "ActionName :".$dispatcher->getActionName()."<br/>" ;
+            }
+        );
+
+        $dispatcher = new Dispatcher();
+        $dispatcher->setEventsManager($eventsManager);
+
+        return $dispatcher;
+    }
+);
+
 //
 // use Phalcon\Http\Response\Cookies;
 // ∟ 伺服器發送到使用者的瀏覽器，並儲存在使用者的電腦上
@@ -110,9 +143,9 @@ $di->set(
 // Handle the request
 try {
     $application = new Application($di);
-    
+
     echo $application->handle()->getContent();
-    
+
     // $response = $application->handle();
     // $response->send();
 } catch (Exception $e) {
