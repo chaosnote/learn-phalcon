@@ -44,7 +44,8 @@ RUN apt update -y && \
         wget \
         zip \
         libjpeg62-turbo-dev \
-        libfreetype6-dev
+        libfreetype6-dev \
+        vim
 
 # Remove this RUN when imagick will be available via pecl
 RUN cd /opt && \
@@ -74,8 +75,8 @@ RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && \
     update-locale LANG=en_US.UTF-8
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype  \
-    --with-jpeg=/usr/include/  \
+RUN docker-php-ext-configure gd --with-freetype-dir \
+    --with-jpeg \
     --with-xpm \
     --with-webp \
     --enable-gd
