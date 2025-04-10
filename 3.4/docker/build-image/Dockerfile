@@ -42,7 +42,9 @@ RUN apt update -y && \
         nano \
         sudo \
         wget \
-        zip
+        zip \
+        libjpeg62-turbo-dev \
+        libfreetype6-dev
 
 # Remove this RUN when imagick will be available via pecl
 RUN cd /opt && \
