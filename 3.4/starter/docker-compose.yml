@@ -1,7 +1,7 @@
 services:
   mariadb:
     image: mariadb:10.11
-    container_name: some_mariadb
+    container_name: starter_mariadb
     ports:
       - "3306:3306"
     environment:
@@ -10,7 +10,7 @@ services:
       MARIADB_DATABASE: simulate
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "1"
     volumes:
-      - /home/chris/data_store:/var/lib/mysql
+      - /home/chris/data_store/starter:/var/lib/mysql
     restart: always
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
@@ -20,31 +20,31 @@ services:
 
   redis:
     image: redis:4.0.2-alpine
-    container_name: some_redis
+    container_name: starter_redis
     expose:
       - "6379:6379"
 
   php-fpm:
     image: phalcon:v3.4.5
-    container_name: some_php_fpm
+    container_name: starter_php_fpm
     depends_on:
       mariadb:
         condition: service_healthy
       redis:
         condition: service_started
     volumes:
-      - /home/chris/phalcon_starter/work:/var/www/html
+      - /home/chris/git/learn-phalcon/3.4/starter/work:/var/www/html
     expose:
       - "9000"
 
   nginx:
     image: nginx:alpine
-    container_name: some_nginx
+    container_name: starter_nginx
     depends_on:
       php-fpm:
         condition: service_started
     ports:
       - "80:80"
     volumes:
-      - /home/chris/phalcon_starter/etc/nginx/conf.d:/etc/nginx/conf.d
-      - /home/chris/phalcon_starter/work:/var/www/html
+      - /home/chris/git/learn-phalcon/3.4/starter/etc/nginx/conf.d:/etc/nginx/conf.d
+      - /home/chris/git/learn-phalcon/3.4/starter/work:/var/www/html
