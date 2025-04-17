@@ -22,6 +22,11 @@ RUN set -eux && \
 	groupadd -g ${MY_GID} -r ${MY_GROUP} && \
 	useradd -u ${MY_UID} -m -s /bin/bash -g ${MY_GROUP} ${MY_USER}
 
+### for php-fpm
+RUN mkdir -p /home/www-data && \
+    chown -R www-data:www-data /home/www-data && \
+    chmod -R 777 /home/www-data
+
 # Update
 RUN apt update -y && \
     apt install -y \
