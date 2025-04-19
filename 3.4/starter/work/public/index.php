@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Loader;
@@ -15,6 +17,7 @@ use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\Dispatcher;
 
+use Elasticsearch\ClientBuilder;
 
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
@@ -98,6 +101,27 @@ $di->set(
     }
 );
 
+$di->setShared(
+    "elk",
+    function () {
+        $hosts = [
+            [
+                'host' => '192.168.0.236',   // 你的 Elasticsearch 位址
+                'port' => '9200',
+                'scheme' => 'http',
+                'user' => 'elastic',      // 如果啟用了安全特性，請提供用戶名
+                'pass' => '123456',     // 如果啟用了安全特性，請提供密碼
+            ],
+        ];
+
+        $client = ClientBuilder::create()
+            ->setHosts($hosts)
+            ->build();
+
+        return $client;
+    }
+);
+
 
 //
 // @see https://docs.phalcon.io/3.4/dispatcher/#dispatch-loop-events
@@ -111,11 +135,11 @@ $di->set(
         $eventsManager = new Manager();
         $eventsManager->attach(
             'dispatch:beforeDispatchLoop',
-            function (Event $event, Dispatcher $dispatcher){
+            function (Event $event, Dispatcher $dispatcher) {
                 // 回傳值
                 // return {true:不影響, false:中止<stop next>} 
-                echo "ControllerName :".$dispatcher->getControllerName()."<br/>" ;
-                echo "ActionName :".$dispatcher->getActionName()."<br/>" ;
+                echo "ControllerName :" . $dispatcher->getControllerName() . "<br/>";
+                echo "ActionName :" . $dispatcher->getActionName() . "<br/>";
             }
         );
 

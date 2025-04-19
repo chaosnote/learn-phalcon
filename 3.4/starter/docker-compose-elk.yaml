@@ -1,0 +1,33 @@
+services:
+  elasticsearch:
+    image: elasticsearch:8.18.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      #- ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - /home/chris/data_store/esdata:/usr/share/elasticsearch/data # 使用綁定掛載
+    networks:
+      - elk
+
+  kibana:
+    image: kibana:8.18.0 # UI
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=["http://elasticsearch:9200"] # 使用 HTTP
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=123456             # ${KIBANA_PASSWORD} 也可使用環境變數
+      - XPACK_SECURITY_ENABED=true                # 顯式啟用 Kibana 的安全特性
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge

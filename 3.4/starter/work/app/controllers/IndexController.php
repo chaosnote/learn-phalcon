@@ -6,7 +6,29 @@ class IndexController extends BaseController
 	/**
 	 * @Route("/index")
 	 */
-	public function indexAction()
+	public function indexAction() {
+		$this->logger->debug("enter index");
+	}
+
+	/**
+	 * @Route("/index/elk")
+	 */
+	public function elkAction() {
+		$this->logger->debug("enter elk");
+		$this->Debug([
+			"user_id"=>"abc",
+			"user_pw"=>"123456"
+		]) ;
+		$this->Info([
+			"user_id"=>"abc",
+			"user_pw"=>"123456"
+		]) ;
+	}
+
+	/**
+	 * @Route("/index/find")
+	 */
+	public function findAction()
 	{
 		// view -> 變數 -> 傳遞至頁面
 		$this->view->users = Users::find();
@@ -39,10 +61,9 @@ class IndexController extends BaseController
 		// 不好處理… 連結範例則只能參考 mix array
 		foreach ($routes as $route) {
 			$paths = $route->getPaths();
-			echo "===== =====<br/>" ;
-			var_dump($paths) ;
-			echo "<br/>" ;
+			echo "===== =====<br/>";
+			var_dump($paths);
+			echo "<br/>";
 		}
-
 	}
 }
