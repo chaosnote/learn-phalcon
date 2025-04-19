@@ -1,4 +1,4 @@
-FROM composer:latest AS composer
+FROM composer:2.2 AS composer
 FROM php:7.1-fpm
 
 ADD ./extra.ini /usr/local/etc/php/conf.d/
