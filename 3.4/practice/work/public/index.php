@@ -1,5 +1,10 @@
 <?php
 
+// 關閉錯誤顯示
+// ini_set('display_errors', 'Off');
+// 設定錯誤報告的級別 (可選，如果需要更精細的控制)
+// ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Loader;
@@ -96,6 +101,7 @@ $di->set(
 // Handle the request
 try {
     $application = new Application($di);
+    $application->session->start();
 
     echo $application->handle()->getContent();
 
