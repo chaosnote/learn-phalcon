@@ -1,1 +1,19 @@
 <h2>Hello from Mode 1</h2>
+
+<?php if (!empty($list)) : ?>
+    <?php foreach ($list as $item) : ?>
+        <p><?= $item->date ?> :<?= $item->message ?></p>
+    <?php endforeach; ?>
+<?php else : ?>
+    <p>no data</p>
+<?php endif; ?>
+
+<hr>
+
+<?php if (!empty($map)) : ?>
+    <?php foreach ($map as $key => $value) : ?>
+        <p><?= $key ?>: <?= $value->date ?>: <?= $value->message ?></p>
+    <?php endforeach; ?>
+<?php else : ?>
+    <p>no data</p>
+<?php endif; ?>

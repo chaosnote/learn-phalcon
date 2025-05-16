@@ -1,4 +1,23 @@
 {% extends "layouts/render_mode2.twig" %}
 {% block content %}
 <h2>Hello from Mode 2</h2>
+
+{% if list %}
+    {% for item in list %}
+        <p>output : {{ item.date }}: {{ item.message }}</p>
+    {% endfor %}
+{% else %}
+    <p>no data</p>
+{% endif %}
+
+<hr>
+
+{% if map %}
+    {% for key, value in map %}
+        <p>{{ key }}: {{ value.date }}: {{ value.message }}</p>
+    {% endfor %}
+{% else %}
+    <p>沒有模組資料。</p>
+{% endif %}
+
 {% endblock %}
