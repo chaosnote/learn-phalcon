@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><?php echo $title ?? '網站'; ?></title>
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+</head>
+<body>
+    <div class="header">
+        <h1>header</h1>
+    </div>
+    <div class="container">
+        <?php echo $this->getContent(); ?>
+    </div>
+    <div class="footer">
+        <p>&copy; footer</p>
+    </div>
+    <!-- <script src="/js/app.js"></script> -->
+</body>
+</html>

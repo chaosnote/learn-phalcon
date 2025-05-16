@@ -5,6 +5,13 @@
 // 設定錯誤報告的級別 (可選，如果需要更精細的控制)
 // ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
 
+
+
+define('BASE_PATH', dirname(__DIR__));
+define('APP_PATH', BASE_PATH . '/app');
+
+require BASE_PATH . '/vendor/autoload.php'; 
+
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Loader;
@@ -16,8 +23,9 @@ use Phalcon\Cache\Frontend\Data as FrontendData;
 use Phalcon\Logger\Factory;
 use Phalcon\Flash\Direct as FlashDirect;
 
-define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
+use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
+use Phalcon\Mvc\View\Engine\Php as PhpEngine; // 引入 PhpEngine
+use Phalcon\Mvc\View\Engine\Twig as TwigEngine; // 引入 TwigEngine
 
 // Register an autoloader
 $loader = new Loader();
@@ -32,11 +40,48 @@ $loader->registerDirs(
 $di = new FactoryDefault();
 
 // Setting up the view component
-$di['view'] = function () {
+$di->set('view', function () {
     $view = new View();
     $view->setViewsDir(APP_PATH . '/views/');
+
+    // 設定 Volt 引擎
+    $cache_dir = "/home/www-data/cache/volt/" ;
+    if(!is_dir($cache_dir)){
+        mkdir($cache_dir, 0777, true) ;
+    }
+    $volt = new VoltEngine($view, $this);
+    $volt->setOptions([
+        'compiledPath'      => $cache_dir,
+        'compiledSeparator' => '_',
+        'stat'              => true, // 在開發模式下建議啟用
+    ]);
+
+    // 註冊 PHTML 引擎
+
+    // 設定並註冊 Twig 引擎
+    $cache_dir = "/home/www-data/cache/twig/" ;
+    if(!is_dir($cache_dir)){
+        mkdir($cache_dir, 0777, true) ;
+    }
+    $twig = new TwigEngine(
+        $view,
+        $this,
+        [
+            'cache' => $cache_dir,
+            'debug' => true,
+            'auto_reload' => true,
+        ]
+    );
+
+    $view->registerEngines([
+        '.volt'  => $volt,
+        '.phtml' => PhpEngine::class,
+        '.twig'  => $twig,
+    ]);
+    
+
     return $view;
-};
+});
 
 // Setup a base URI so that all generated URIs include the "tutorial" folder
 $di['url'] = function () {
