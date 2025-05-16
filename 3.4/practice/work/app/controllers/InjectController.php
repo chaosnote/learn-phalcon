@@ -10,7 +10,6 @@ class db_store extends Phalcon\Di\Injectable{
         
         $this->logger = $this->di->get("logger") ;
         $this->logger->debug("abc") ;
-        // 
     }
 }
 
