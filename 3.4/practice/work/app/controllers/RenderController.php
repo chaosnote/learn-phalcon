@@ -10,7 +10,6 @@ class task {
         $this->message = $_message;
     }
 }
-
 /**
  * @property array<string,task> $map
  * @property task[] $list

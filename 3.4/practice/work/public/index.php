@@ -5,12 +5,10 @@
 // 設定錯誤報告的級別 (可選，如果需要更精細的控制)
 // ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
 
-
-
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
-require BASE_PATH . '/vendor/autoload.php'; 
+require BASE_PATH . '/vendor/autoload.php';
 
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Di\FactoryDefault;
@@ -20,19 +18,36 @@ use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Mvc\View;
 use Phalcon\Cache\Backend\Redis;
 use Phalcon\Cache\Frontend\Data as FrontendData;
-use Phalcon\Logger\Factory;
 use Phalcon\Flash\Direct as FlashDirect;
+
+use Phalcon\Logger\Factory;
+use Phalcon\Logger\Formatter\Line;
+use Phalcon\Logger\FormatterInterface;
 
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine; // 引入 PhpEngine
 use Phalcon\Mvc\View\Engine\Twig as TwigEngine; // 引入 TwigEngine
+
+class CustomFormatter extends Line implements FormatterInterface
+{
+    public function format($message, $type, $timestamp, $context = null)
+    {
+        $output = '';
+        if (!empty($context) && is_array($context)) {
+            $output = ' ' . json_encode($context);
+        }
+
+        return parent::format($message.$output, $type, $timestamp);
+    }
+}
 
 // Register an autoloader
 $loader = new Loader();
 $loader->registerDirs(
     array(
         APP_PATH . '/controllers/',
-        APP_PATH . '/models/'
+        APP_PATH . '/models/',
+        APP_PATH . '/utils/',
     )
 )->register();
 
@@ -121,9 +136,10 @@ $di['redis_short'] = function () {
 $di['logger'] = function ($path) {
     $options = [
         'name'    => $path,
-        'adapter' => 'file',
+        'adapter' => 'file'
     ];
     $logger = Factory::load($options);
+    $logger->setFormatter(new CustomFormatter('[%date%][%type%] %message%'));
     return $logger;
 };
 

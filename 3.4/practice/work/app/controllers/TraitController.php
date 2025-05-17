@@ -26,6 +26,6 @@ class TraitController extends BaseController
         echo "is_post :".($this->request->isPost()?"yes":"no")."<br/>" ;
         echo "is_get :".($this->request->isGet()?"yes":"no")."<br/>" ;
 
-        $this->Init();
+        $this->init_inject();
     }
 }
