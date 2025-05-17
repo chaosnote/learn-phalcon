@@ -4,6 +4,7 @@
 {% else %}
 {% endfor %}
 </select>
+
 <script>
     var data = JSON.parse('{{data}}');
     console.log(data) ;

@@ -10,15 +10,15 @@ define('APP_PATH', BASE_PATH . '/app');
 
 require BASE_PATH . '/vendor/autoload.php';
 
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Loader;
 use Phalcon\Mvc\Application;
-use Phalcon\Mvc\Url as UrlProvider;
+use Phalcon\Mvc\Url;
 use Phalcon\Mvc\View;
 use Phalcon\Cache\Backend\Redis;
-use Phalcon\Cache\Frontend\Data as FrontendData;
-use Phalcon\Flash\Direct as FlashDirect;
+use Phalcon\Cache\Frontend\Data;
+use Phalcon\Flash\Direct;
 
 use Phalcon\Logger\Factory;
 use Phalcon\Logger\Formatter\Line;
@@ -100,14 +100,14 @@ $di->set('view', function () {
 
 // Setup a base URI so that all generated URIs include the "tutorial" folder
 $di['url'] = function () {
-    $url = new UrlProvider();
+    $url = new Url();
     $url->setBaseUri('/');
     return $url;
 };
 
 // Set the database service
 $di['db'] = function () {
-    return new DbAdapter(array(
+    return new Mysql(array(
         "host"     => "mariadb",
         "username" => "chris",
         "password" => "123456",
@@ -118,7 +118,7 @@ $di['db'] = function () {
 // Set redis service
 $di['redis_short'] = function () {
     // 設置緩存期效(必需參數)
-    $frontend = new FrontendData([
+    $frontend = new Data([
         'lifetime' => 86400, // 每天
     ]);
 
@@ -146,7 +146,7 @@ $di['logger'] = function ($path) {
 $di->set(
     'flash',
     function () {
-        $flash = new FlashDirect(
+        $flash = new Direct(
             [
                 'error'   => 'alert alert-danger',
                 'success' => 'alert alert-success',
