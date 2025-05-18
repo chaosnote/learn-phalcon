@@ -2,5 +2,10 @@
     "require": {
         "twig/twig": "^2.16",
         "phalcon/incubator": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Common\\": "Common/"
+        }
     }
 }

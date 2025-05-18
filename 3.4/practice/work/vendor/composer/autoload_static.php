@@ -27,6 +27,10 @@ class ComposerStaticInitba014a74570615b05b6aa97273429d19
         array (
             'Phalcon\\' => 8,
         ),
+        'C' => 
+        array (
+            'Common\\' => 7,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -49,6 +53,10 @@ class ComposerStaticInitba014a74570615b05b6aa97273429d19
         'Phalcon\\' => 
         array (
             0 => __DIR__ . '/..' . '/phalcon/incubator/Library/Phalcon',
+        ),
+        'Common\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Common',
         ),
     );
 

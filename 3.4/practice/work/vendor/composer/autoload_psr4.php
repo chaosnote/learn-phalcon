@@ -11,4 +11,5 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Phalcon\\' => array($vendorDir . '/phalcon/incubator/Library/Phalcon'),
+    'Common\\' => array($baseDir . '/Common'),
 );

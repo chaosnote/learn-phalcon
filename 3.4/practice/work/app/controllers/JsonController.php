@@ -1,11 +1,13 @@
 <?php
 
+use Common\CountryCodeStore ;
+
 class JsonController extends BaseController{
     /** 
      * @Route("/Json")
      */
     function IndexAction(){
-        $countries = new Countries();
+        $countries = new CountryCodeStore();
 
         $this->logger->debug("check", [
             "[0]" => ($countries->validate("886", "900123456") ? "OK" : "NO" ),
