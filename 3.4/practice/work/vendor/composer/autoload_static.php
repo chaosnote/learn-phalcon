@@ -16,6 +16,7 @@ class ComposerStaticInitba014a74570615b05b6aa97273429d19
         'T' => 
         array (
             'Twig\\' => 5,
+            'Tools\\' => 6,
         ),
         'S' => 
         array (
@@ -37,6 +38,10 @@ class ComposerStaticInitba014a74570615b05b6aa97273429d19
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
+        ),
+        'Tools\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Tools',
         ),
         'Symfony\\Polyfill\\Php72\\' => 
         array (

@@ -1,7 +1,10 @@
 <?php
 
+use Tools\KeyPair;
+use Tools\MD5;
+
 /**
- * @property \Phalcon\DiInterface $di
+ * @property Phalcon\DiInterface $di
  * @property Phalcon\Logger\AdapterInterface $logger
  */
 trait store {
@@ -13,6 +16,17 @@ trait store {
 
 class TraitController extends BaseController
 {
+    use MD5 ;
+    /**
+     * @Route("/Trait")
+     */
+    public function IndexAction() {
+        echo $this->encrypt(
+            new KeyPair("abc", "123"),
+            new KeyPair("def", "456"),
+            new KeyPair("ghi", "789")
+        ) ;
+    }
     use store ;
     /**
      * @Route("/Trait/Caller")
