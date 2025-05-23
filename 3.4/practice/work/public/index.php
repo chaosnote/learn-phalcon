@@ -98,7 +98,6 @@ $di->set('view', function () {
     return $view;
 });
 
-// Setup a base URI so that all generated URIs include the "tutorial" folder
 $di['url'] = function () {
     $url = new Url();
     $url->setBaseUri('/');

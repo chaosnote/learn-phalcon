@@ -1,7 +1,7 @@
 <?php
 
-use Tools\KeyPair;
-use Tools\MD5;
+use Tools\Crypto\KeyPair;
+use Tools\Crypto\MD5;
 
 /**
  * @property Phalcon\DiInterface $di

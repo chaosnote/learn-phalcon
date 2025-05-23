@@ -1,6 +1,6 @@
 <?php
 
-namespace Tools ;
+namespace Tools\Crypto ;
 
 /**
  * @property string $name
