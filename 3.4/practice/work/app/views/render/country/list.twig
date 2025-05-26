@@ -1,0 +1,9 @@
+{% if countries %}
+    <select id="countries">
+    {% for key, value in countries %}
+        <option value="{{ countries.name }}">+{{ key }}</option>
+    {% endfor %}
+    </select>
+{% else %}
+    <p>無資料</p>
+{% endif %}

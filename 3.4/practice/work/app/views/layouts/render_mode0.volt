@@ -1,4 +1,3 @@
-{# app/views/layouts/main.volt #}
 <!DOCTYPE html>
 <html>
 <head>

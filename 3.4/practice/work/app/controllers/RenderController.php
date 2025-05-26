@@ -1,5 +1,7 @@
 <?php 
 
+use Common\CountryCodeStore ;
+
 /**
  * @property string $date
  * @property string $message
@@ -43,6 +45,15 @@ class RenderController extends BaseController{
         $this->view->pick("render/mode0");
     }
     /** 
+     * @Route("/Render/Mode0_0")
+     */
+    function Mode0_0Action(){
+        $countries = new CountryCodeStore();
+        $this->view->setVar('title', 'Mode 0-0');
+        $this->view->setVar('message', 'partial');
+        $this->view->setVar("countries", $countries->store);
+    }
+    /** 
      * @Route("/Render/Mode1")
      */
     function Mode1Action(){
@@ -61,5 +72,14 @@ class RenderController extends BaseController{
         $this->view->setVar('title', 'Mode 2');
         $this->view->setVar('map', $this->map);
         $this->view->setVar('list', $this->list);
+    }
+    /** 
+     * @Route("/Render/Mode2_0")
+     */
+    function Mode2_0Action(){
+        $countries = new CountryCodeStore();
+        $this->view->setVar('title', 'Mode 2-0');
+        $this->view->setVar('message', 'partial');
+        $this->view->setVar("countries", $countries->store);
     }
 }
