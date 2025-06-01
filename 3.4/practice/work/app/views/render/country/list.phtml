@@ -1,0 +1,9 @@
+<?php if (!empty($countries)) : ?>
+    <select id="countries">
+        <?php foreach ($countries as $key => $value) : ?>
+            <option value="<?= $value->name ?>">+<?= $key ?></option>
+        <?php endforeach; ?>
+    </select>
+<?php else : ?>
+    <p>no data</p>
+<?php endif; ?>

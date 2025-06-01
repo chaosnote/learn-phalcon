@@ -48,6 +48,7 @@ class RenderController extends BaseController{
      * @Route("/Render/Mode0_0")
      */
     function Mode0_0Action(){
+        // volt 明顯快取
         $countries = new CountryCodeStore();
         $this->view->setVar('title', 'Mode 0-0');
         $this->view->setVar('message', 'partial');
@@ -64,6 +65,14 @@ class RenderController extends BaseController{
         $this->view->pick('render/mode1');
         // $content = $this->view->render('page/custom'); // 渲染 Action View 並獲取內容
         // $this->view->setContent($content); // 將內容設定到 View 物件
+    }
+    /** 
+     * @Route("/Render/Mode1_0")
+     */
+    function Mode1_0Action(){
+        $countries = new CountryCodeStore();
+        $this->view->setVar('title', 'Mode 1_0');
+        $this->view->setVar("countries", $countries->store);
     }
     /** 
      * @Route("/Render/Mode2")
