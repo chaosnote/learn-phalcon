@@ -1,4 +1,9 @@
 {
+    "config": {
+        "platform": {
+            "php": "7.1"
+        }
+    },
     "require": {
         "twig/twig": "^2.16",
         "phalcon/incubator": "^3.4"
