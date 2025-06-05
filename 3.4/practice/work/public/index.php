@@ -1,9 +1,10 @@
 <?php
 
 // 關閉錯誤顯示
-// ini_set('display_errors', 'Off');
+ini_set('display_errors', 1);
 // 設定錯誤報告的級別 (可選，如果需要更精細的控制)
 // ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+ini_set('error_reporting', E_ALL);
 
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
@@ -18,6 +19,7 @@ use Phalcon\Mvc\Url;
 use Phalcon\Mvc\View;
 use Phalcon\Cache\Backend\Redis;
 use Phalcon\Cache\Frontend\Data;
+
 use Phalcon\Flash\Direct;
 
 use Phalcon\Logger\Factory;
@@ -28,6 +30,8 @@ use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine; // 引入 PhpEngine
 use Phalcon\Mvc\View\Engine\Twig as TwigEngine; // 引入 TwigEngine
 
+use Phalcon\Session\Adapter\Files as SessionAdapter;
+
 class CustomFormatter extends Line implements FormatterInterface
 {
     public function format($message, $type, $timestamp, $context = null)
@@ -37,7 +41,7 @@ class CustomFormatter extends Line implements FormatterInterface
             $output = ' ' . json_encode($context);
         }
 
-        return parent::format($message.$output, $type, $timestamp);
+        return parent::format($message . $output, $type, $timestamp);
     }
 }
 
@@ -61,23 +65,23 @@ $di->set('view', function () {
     $view->setViewsDir(APP_PATH . '/views/');
 
     // 設定 Volt 引擎
-    $cache_dir = "/home/www-data/cache/volt/" ;
-    if(!is_dir($cache_dir)){
-        mkdir($cache_dir, 0777, true) ;
+    $cache_dir = "/home/www-data/cache/volt/";
+    if (!is_dir($cache_dir)) {
+        mkdir($cache_dir, 0777, true);
     }
     $volt = new VoltEngine($view, $this);
     $volt->setOptions([
-        'compiledPath'      => $cache_dir,
+        'compiledPath' => $cache_dir,
         'compiledSeparator' => '_',
-        'stat'              => true, // 在開發模式下建議啟用
+        'stat' => true, // 在開發模式下建議啟用
     ]);
 
     // 註冊 PHTML 引擎
 
     // 設定並註冊 Twig 引擎
-    $cache_dir = "/home/www-data/cache/twig/" ;
-    if(!is_dir($cache_dir)){
-        mkdir($cache_dir, 0777, true) ;
+    $cache_dir = "/home/www-data/cache/twig/";
+    if (!is_dir($cache_dir)) {
+        mkdir($cache_dir, 0777, true);
     }
     $twig = new TwigEngine(
         $view,
@@ -90,67 +94,60 @@ $di->set('view', function () {
     );
 
     $view->registerEngines([
-        '.volt'  => $volt,
+        '.volt' => $volt,
         '.phtml' => PhpEngine::class,
-        '.twig'  => $twig,
+        '.twig' => $twig,
     ]);
-    
+
 
     return $view;
 });
-
-$di['url'] = function () {
+$di->set('url', function () {
     $url = new Url();
     $url->setBaseUri('/');
     return $url;
-};
-
-// Set the database service
-$di['db'] = function () {
+});
+$di->set('db', function () {
     return new Mysql(array(
-        "host"     => "mariadb",
+        "host" => "mariadb",
         "username" => "chris",
         "password" => "123456",
-        "dbname"   => "simulate"
+        "dbname" => "simulate"
     ));
-};
-
-// Set redis service
-$di['redis_short'] = function () {
+});
+$di->set("redis", function ($duration, $index = 0) {
     // 設置緩存期效(必需參數)
     $frontend = new Data([
-        'lifetime' => 86400, // 每天
+        'lifetime' => $duration, // 例: 每天 - 86400
     ]);
-
     // 連線配置
     $backend = new Redis($frontend, [
         'host' => "redis",
         'port' => 6379,
         'persistent' => true, // 是否使用持久連線
-        'index' => 0, // 指定 Redis 資料庫(預設:0)
+        'index' => $index, // 指定 Redis 資料庫(預設:0)
     ]);
 
     return $backend;
-};
+});
 
-$di['logger'] = function ($path) {
+$di->set('logger', function ($path) {
     $options = [
-        'name'    => $path,
+        'name' => $path,
         'adapter' => 'file'
     ];
     $logger = Factory::load($options);
     $logger->setFormatter(new CustomFormatter('[%date%][%type%] %message%'));
     return $logger;
-};
-
+});
 $di->set(
     'flash',
     function () {
         $flash = new Direct(
             [
-                'error'   => 'alert alert-danger',
+                'error' => 'alert alert-danger',
                 'success' => 'alert alert-success',
-                'notice'  => 'alert alert-info',
+                'notice' => 'alert alert-info',
                 'warning' => 'alert alert-warning',
             ]
         );
@@ -159,6 +156,12 @@ $di->set(
     }
 );
 
+$di->setShared('session', function () {
+    $session = new SessionAdapter();
+    $session->start();
+
+    return $session;
+});
 // Handle the request
 try {
     $application = new Application($di);

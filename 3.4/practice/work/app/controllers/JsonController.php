@@ -9,7 +9,8 @@ class JsonController extends BaseController{
     function IndexAction(){
         $countries = new CountryCodeStore();
 
-        $this->logger->debug("check", [
+        $logger = $this->gen_logger($this->dispatcher->getControllerName());
+        $logger->debug("check", [
             "[0]" => ($countries->validate("886", "900123456") ? "OK" : "NO" ),
             "[1]" => ($countries->validate("88", "900123456") ? "OK" : "NO" ),
         ]) ;

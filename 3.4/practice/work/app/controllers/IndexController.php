@@ -20,7 +20,9 @@ class IndexController extends BaseController implements CustomDefine
 	 * @Route("/index")
 	 */
 	public function indexAction() {
-		$this->logger->debug("enter index");
+		$logger = $this->gen_logger();
+		$logger->debug("enter index");
+
 		echo self::VERSION."<br>" ;
 		echo var_dump($this->getHost())."<br>";
 		echo (empty("") ? "Empty" : "Value")."<br>";

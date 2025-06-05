@@ -1,14 +1,10 @@
 <?php 
 
-/**
- * @property Phalcon\Logger\AdapterInterface $logger
- */
 class db_store extends Phalcon\Di\Injectable{
+    use CustomInject;
     public function __construct(){
-        $this->logger = $this->logger ?? $this->getDI()->get("logger");
-        echo "logger :".(isset($this->logger) ? "set" : "unset")."<br/>" ; // set
-
-        $this->logger->debug("logger :".(isset($this->logger) ? "set" : "unset")."<br/>") ; // set
+        $logger = $this->gen_logger();
+		$logger->debug("new db_store");
     }
     function Init(){
         $this->di = $this->di ?? $this->getDI();
@@ -17,8 +13,8 @@ class db_store extends Phalcon\Di\Injectable{
         $this->db = $this->db ?? $this->getDI()->get("db");
         echo "db :".(isset($this->db) ? "set" : "unset")."<br/>" ; // set
 
-        $this->logger = $this->di->get("logger") ;
-        $this->logger->debug("abc") ;
+        $logger = $this->gen_logger("logger");
+        $logger->debug("abc") ;
     }
 }
 
