@@ -118,7 +118,7 @@ $di->set('db', function () {
 $di->set("redis", function ($duration, $index = 0) {
     // 設置緩存期效(必需參數)
     $frontend = new Data([
-        'lifetime' => $duration, // 例: 每天 - 86400
+        'lifetime' => $duration, // 例: 每天 - 86400 ( 亦或是 PHP_INT_MAX )
     ]);
     // 連線配置
     $backend = new Redis($frontend, [
