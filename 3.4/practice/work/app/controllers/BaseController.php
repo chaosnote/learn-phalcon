@@ -2,10 +2,9 @@
 
 use Phalcon\Mvc\Controller;
 
+/**
+ * @property Phalcon\Db\Adapter\Pdo\Mysql $db
+ */
 class BaseController extends Controller
 {
-    use CustomInject ;
-    public function initialize() {
-        $this->init_inject();
-    }
 }

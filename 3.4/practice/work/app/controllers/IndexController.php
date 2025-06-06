@@ -20,7 +20,7 @@ class IndexController extends BaseController implements CustomDefine
 	 * @Route("/index")
 	 */
 	public function indexAction() {
-		$logger = $this->gen_logger();
+		$logger = ExtraFunc::GenLogger() ;
 		$logger->debug("enter index");
 
 		echo self::VERSION."<br>" ;
