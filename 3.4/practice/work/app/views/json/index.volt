@@ -1,6 +1,6 @@
 <select id="countries">
 {% for key, value in countries %}
-    <option value="{{ countries.name }}">+{{ key }}</option>
+    <option value="{{ value.name }}">+{{ key }}</option>
 {% else %}
 {% endfor %}
 </select>

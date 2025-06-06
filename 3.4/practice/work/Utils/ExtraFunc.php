@@ -1,5 +1,5 @@
 <?php
-
+namespace Utils;
 class ExtraFunc
 {
     private const ERR_MESSAGE = "使用時機點錯誤，需在 Controller.initialize() 觸發(後)使用";

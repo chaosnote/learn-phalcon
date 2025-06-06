@@ -1,6 +1,8 @@
 <?php
 
-use Common\CountryCodeStore ;
+use \Common\CountryCodeStore ;
+
+use \Utils\ExtraFunc ;
 
 class JsonController extends BaseController{
     /** 

@@ -1,5 +1,5 @@
 <?php
-
+use \Utils\ExtraFunc ;
 interface CustomDefine {
     const VERSION = 'version.0.0.0';
 }
