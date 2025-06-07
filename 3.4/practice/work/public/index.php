@@ -17,6 +17,7 @@ use \Phalcon\Loader;
 use \Phalcon\Mvc\Application;
 use \Phalcon\Mvc\Url;
 use \Phalcon\Mvc\View;
+
 use \Phalcon\Cache\Backend\Redis;
 use \Phalcon\Cache\Frontend\Data;
 
@@ -120,6 +121,29 @@ $di->set(DIKey::DB, function () {
     ));
 });
 
+$di->set(
+    DIKey::FLASH,
+    function () {
+        $flash = new Direct(
+            [
+                'error' => 'alert alert-danger',
+                'success' => 'alert alert-success',
+                'notice' => 'alert alert-info',
+                'warning' => 'alert alert-warning',
+            ]
+        );
+
+        return $flash;
+    }
+);
+
+$di->setShared(DIKey::SESSION, function () {
+    $session = new SessionAdapter();
+    $session->start();
+
+    return $session;
+});
+
 $di->set(DIKey::REDIS, function ($duration, $index = 0) {
     // 設置緩存期效(必需參數)
     $frontend = new Data([
@@ -146,28 +170,6 @@ $di->set(DIKey::LOGGER, function ($path) {
     return $logger;
 });
 
-$di->set(
-    DIKey::FLASH,
-    function () {
-        $flash = new Direct(
-            [
-                'error' => 'alert alert-danger',
-                'success' => 'alert alert-success',
-                'notice' => 'alert alert-info',
-                'warning' => 'alert alert-warning',
-            ]
-        );
-
-        return $flash;
-    }
-);
-
-$di->setShared(DIKey::SESSION, function () {
-    $session = new SessionAdapter();
-    $session->start();
-
-    return $session;
-});
 // Handle the request
 try {
     $application = new Application($di);
