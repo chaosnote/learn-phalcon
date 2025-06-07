@@ -1,5 +1,7 @@
 <?php
+
 namespace Utils;
+
 class ExtraFunc
 {
     private const ERR_MESSAGE = "使用時機點錯誤，需在 Controller.initialize() 觸發(後)使用";
@@ -18,7 +20,7 @@ class ExtraFunc
         if (!empty($subfix)) {
             $file_name = $file_name . "_" . $subfix;
         }
-        return $di->get("logger", ["/home/www-data/" . $file_name . ".log"]);
+        return $di->get(DIKey::LOGGER, ["/home/www-data/" . $file_name . ".log"]);
     }
     /**
      * @param int $duration 持續時間
@@ -32,6 +34,6 @@ class ExtraFunc
             throw new \Exception(self::ERR_MESSAGE);
         }
 
-        return $di->get("redis", [$duration, $index]);
+        return $di->get(DIKey::REDIS, [$duration, $index]);
     }
 }

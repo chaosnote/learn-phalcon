@@ -11,26 +11,28 @@ define('APP_PATH', BASE_PATH . '/app');
 
 require BASE_PATH . '/vendor/autoload.php';
 
-use Phalcon\Di\FactoryDefault;
-use Phalcon\Db\Adapter\Pdo\Mysql;
-use Phalcon\Loader;
-use Phalcon\Mvc\Application;
-use Phalcon\Mvc\Url;
-use Phalcon\Mvc\View;
-use Phalcon\Cache\Backend\Redis;
-use Phalcon\Cache\Frontend\Data;
+use \Phalcon\Di\FactoryDefault;
+use \Phalcon\Db\Adapter\Pdo\Mysql;
+use \Phalcon\Loader;
+use \Phalcon\Mvc\Application;
+use \Phalcon\Mvc\Url;
+use \Phalcon\Mvc\View;
+use \Phalcon\Cache\Backend\Redis;
+use \Phalcon\Cache\Frontend\Data;
 
-use Phalcon\Flash\Direct;
+use \Phalcon\Flash\Direct;
 
-use Phalcon\Logger\Factory;
-use Phalcon\Logger\Formatter\Line;
-use Phalcon\Logger\FormatterInterface;
+use \Phalcon\Logger\Factory;
+use \Phalcon\Logger\Formatter\Line;
+use \Phalcon\Logger\FormatterInterface;
 
-use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
-use Phalcon\Mvc\View\Engine\Php as PhpEngine; // 引入 PhpEngine
-use Phalcon\Mvc\View\Engine\Twig as TwigEngine; // 引入 TwigEngine
+use \Phalcon\Mvc\View\Engine\Volt as VoltEngine;
+use \Phalcon\Mvc\View\Engine\Php as PhpEngine; // 引入 PhpEngine
+use \Phalcon\Mvc\View\Engine\Twig as TwigEngine; // 引入 TwigEngine
 
-use Phalcon\Session\Adapter\Files as SessionAdapter;
+use \Phalcon\Session\Adapter\Files as SessionAdapter;
+
+use \Utils\DIKey;
 
 class CustomFormatter extends Line implements FormatterInterface
 {
@@ -102,12 +104,14 @@ $di->set('view', function () {
 
     return $view;
 });
-$di->set('url', function () {
+
+$di->set(DIKey::URL, function () {
     $url = new Url();
     $url->setBaseUri('/');
     return $url;
 });
-$di->set('db', function () {
+
+$di->set(DIKey::DB, function () {
     return new Mysql(array(
         "host" => "mariadb",
         "username" => "chris",
@@ -115,7 +119,8 @@ $di->set('db', function () {
         "dbname" => "simulate"
     ));
 });
-$di->set("redis", function ($duration, $index = 0) {
+
+$di->set(DIKey::REDIS, function ($duration, $index = 0) {
     // 設置緩存期效(必需參數)
     $frontend = new Data([
         'lifetime' => $duration, // 例: 每天 - 86400 ( 亦或是 PHP_INT_MAX )
@@ -131,7 +136,7 @@ $di->set("redis", function ($duration, $index = 0) {
     return $backend;
 });
 
-$di->set('logger', function ($path) {
+$di->set(DIKey::LOGGER, function ($path) {
     $options = [
         'name' => $path,
         'adapter' => 'file'
@@ -140,8 +145,9 @@ $di->set('logger', function ($path) {
     $logger->setFormatter(new CustomFormatter('[%date%][%type%] %message%'));
     return $logger;
 });
+
 $di->set(
-    'flash',
+    DIKey::FLASH,
     function () {
         $flash = new Direct(
             [
@@ -156,7 +162,7 @@ $di->set(
     }
 );
 
-$di->setShared('session', function () {
+$di->setShared(DIKey::SESSION, function () {
     $session = new SessionAdapter();
     $session->start();
 
