@@ -1,29 +1,18 @@
 <?php
-/*
-  +------------------------------------------------------------------------+
-  | Phalcon Developer Tools                                                |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2017 Phalcon Team (https://www.phalconphp.com)      |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file LICENSE.txt.                             |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
-  | Authors: Andres Gutierrez <andres@phalconphp.com>                      |
-  |          Eduar Carvajal <eduar@phalconphp.com>                         |
-  |          Serghei Iakovlev <serghei@phalconphp.com>                     |
-  +------------------------------------------------------------------------+
-*/
 
-define('PUBLIC_PATH', __DIR__ . '/public');
+declare(strict_types=1);
 
-$uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-if ($uri !== '/' && file_exists(PUBLIC_PATH . $uri)) {
+// 取出 URI 中的 path 部分（不包含 query string）
+$uri = urldecode(
+    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
+);
+
+// 如果請求的檔案真實存在，直接交給 PHP 內建伺服器處理
+if ($uri !== '/' && file_exists(__DIR__ . '/public' . $uri)) {
     return false;
 }
-$_GET['_url'] = $_SERVER['REQUEST_URI'];
 
-require_once PUBLIC_PATH . '/index.php';
+// ✅ 只保留 path，避免把 query string 塞進 _url
+$_GET['_url'] = $uri;
+
+require_once __DIR__ . '/public/index.php';

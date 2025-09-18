@@ -167,11 +167,9 @@ $di->set(
 // Handle the request
 try {
     $application = new Application($di);
-
-    echo $application->handle()->getContent();
-
-    // $response = $application->handle();
-    // $response->send();
+    $application->session->start();
+    $response = $application->handle($_GET['_url'] ?? '/');
+    $response->send();
 } catch (Exception $e) {
     echo "Exception: ", $e->getMessage();
 }
