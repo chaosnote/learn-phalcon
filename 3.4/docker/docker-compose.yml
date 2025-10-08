@@ -4,14 +4,14 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /home/chris/git/learn-phalcon/3.4/docker/etc/nginx/conf.d:/etc/nginx/conf.d
-      - /home/chris/git/learn-phalcon/3.4/docker/work:/var/www/html
+      - /mnt/d/History/Git/learn-phalcon/3.4/docker/etc/nginx/conf.d:/etc/nginx/conf.d
+      - /mnt/d/History/Git/learn-phalcon/3.4/docker/work:/var/www/html
     depends_on:
       - php-fpm
 
   php-fpm:
     image: phalcon:v3.4.5
     volumes:
-      - /home/chris/git/learn-phalcon/3.4/docker/work:/var/www/html
+      - /mnt/d/History/Git/learn-phalcon/3.4/docker/work:/var/www/html
     expose:
       - "9000"
