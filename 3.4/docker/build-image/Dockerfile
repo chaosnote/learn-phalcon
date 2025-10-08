@@ -27,9 +27,18 @@ RUN mkdir -p /home/www-data && \
     chown -R www-data:www-data /home/www-data && \
     chmod -R 777 /home/www-data
 
-# Update
-RUN apt update -y && \
-    apt install -y \
+# Update and Install Dependencies
+# *** 【核心修正部分：方案二 - 直接覆蓋 sources.list 檔案】 ***
+# 這是處理已歸檔的 Debian 版本（如 Buster）最可靠的方法，避免複雜的 sed 替換錯誤。
+RUN set -eux; \
+    # 覆蓋為指向 archive.debian.org 的精簡 buster 套件庫
+    echo "deb http://archive.debian.org/debian buster main contrib non-free" > /etc/apt/sources.list; \
+    # 添加安全更新的歸檔庫 (如果仍存在的話，通常是必要的)
+    echo "deb http://archive.debian.org/debian-security buster/updates main contrib non-free" >> /etc/apt/sources.list; \
+    \
+    # 執行更新和安裝
+    apt update -y; \
+    apt install -y --no-install-recommends \
         apt-utils \
         gettext \
         git \
@@ -50,7 +59,12 @@ RUN apt update -y && \
         zip \
         libjpeg62-turbo-dev \
         libfreetype6-dev \
-        vim
+        vim; \
+    \
+    # 清理以減少映像大小
+    apt autoremove -y; \
+    apt clean; \
+    rm -rf /var/lib/apt/lists/*
 
 # Remove this RUN when imagick will be available via pecl
 RUN cd /opt && \
