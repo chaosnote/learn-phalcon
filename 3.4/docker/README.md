@@ -17,7 +17,8 @@
 * sudo docker-compose down
 
 ## 運行 docker
-* sudo docker run --name some-phalcon --rm -d phalcon:v3.4.5
-* sudo docker exec -ti ContainerID bash
+* sudo docker ps -a
+* sudo docker exec -ti `ContainerID` bash
 * php -m
-* sudo docker stop some-phalcon
+* which composer
+* sudo docker stop `ContainerID`
