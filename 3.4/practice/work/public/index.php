@@ -18,9 +18,6 @@ use \Phalcon\Mvc\Application;
 use \Phalcon\Mvc\Url;
 use \Phalcon\Mvc\View;
 
-use \Phalcon\Cache\Backend\Redis;
-use \Phalcon\Cache\Frontend\Data;
-
 use \Phalcon\Flash\Direct;
 
 use \Phalcon\Logger\Factory;
@@ -144,20 +141,12 @@ $di->setShared(DIKey::SESSION, function () {
     return $session;
 });
 
-$di->set(DIKey::REDIS, function ($duration, $index = 0) {
-    // 設置緩存期效(必需參數)
-    $frontend = new Data([
-        'lifetime' => $duration, // 例: 每天 - 86400 ( 亦或是 PHP_INT_MAX )
-    ]);
-    // 連線配置
-    $backend = new Redis($frontend, [
-        'host' => "redis",
-        'port' => 6379,
-        'persistent' => true, // 是否使用持久連線
-        'index' => $index, // 指定 Redis 資料庫(預設:0)
-    ]);
-
-    return $backend;
+$di->set(DIKey::REDIS, function ($index=0) {
+    $redis = new \Redis();
+    $redis->pconnect('redis', 6379); // 使用持久連線 pconnect (host 填你的 Redis Docker 服務名稱或 IP)
+    $redis->select($index); // 切換指定資料庫 (預設 0)
+    
+    return $redis;
 });
 
 $di->set(DIKey::LOGGER, function ($path) {

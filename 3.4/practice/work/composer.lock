@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07835919ad2cc965a5ab1cecefbebdac",
+    "content-hash": "3409a985f6a7c91457aae2f281b3229c",
     "packages": [
         {
             "name": "phalcon/incubator",
@@ -405,5 +405,8 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
+    "platform-overrides": {
+        "php": "7.1.33"
+    },
     "plugin-api-version": "2.2.0"
 }
