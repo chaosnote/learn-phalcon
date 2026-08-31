@@ -3,7 +3,7 @@
 ## proj
 
 ``` pwd
-cd /home/chris/git/learn-phalcon/3.4/practice
+cd /mnt/d/History/Git/learn-phalcon/3.4/practice
 ```
 
 ## docker-composer 指令
