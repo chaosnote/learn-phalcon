@@ -34,47 +34,34 @@ $di->setShared('url', function () {
  * Setting up the view component
  */
 $di->setShared('view', function () {
-    try {
-        $config = $this->getConfig();
+    $config = $this->getConfig();
 
-        $view = new View();
-        $view->setDI($this);
-        $view->setViewsDir($config->application->viewsDir);
+    $view = new View();
+    $view->setDI($this);
+    $view->setViewsDir($config->application->viewsDir);
 
-        $view->registerEngines([
-            '.volt' => function ($view) use ($config) {
-                $volt = new VoltEngine($view, $this);
-                $volt->setOptions([
-                    'path' => $config->application->cacheDir . 'volt/',
-                    'separator' => '_'
-                ]);
-                return $volt;
-            },
-            '.twig' => function ($view) use ($config) {
-                $loader = new \Twig\Loader\FilesystemLoader($view->getViewsDir());
-                $twigEnv = new \Twig\Environment($loader, [
-                    'cache' => $config->application->cacheDir . 'twig/',
-                    'auto_reload' => true,
-                    'debug' => true,
-                ]);
-                return new TwigEngine($view, $this, $twigEnv);
-            },
-            '.phtml' => PhpEngine::class
-        ]);
+    $view->registerEngines([
+        '.volt' => function ($view) use ($config) {
+            $volt = new VoltEngine($view, $this);
+            $volt->setOptions([
+                'path' => $config->application->cacheDir . 'volt/',
+                'separator' => '_'
+            ]);
+            return $volt;
+        },
+        '.twig' => function ($view) use ($config) {
+            $loader = new \Twig\Loader\FilesystemLoader($view->getViewsDir());
+            $twigEnv = new \Twig\Environment($loader, [
+                'cache' => $config->application->cacheDir . 'twig/',
+                'auto_reload' => true,
+                'debug' => true,
+            ]);
+            return new TwigEngine($view, $this, $twigEnv);
+        },
+        '.phtml' => PhpEngine::class
+    ]);
 
-        return $view;
-
-    } catch (\Throwable $e) {
-        // 強制在畫面印出詳細錯誤與堆疊追蹤
-        echo '<div style="background: #ffe6e6; color: #900; padding: 20px; border: 2px solid red; font-family: monospace; z-index: 99999; position: relative;">';
-        echo '<h2>🚨 View Service 發生致命錯誤</h2>';
-        echo '<p><strong>錯誤訊息：</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
-        echo '<p><strong>發生檔案：</strong> ' . $e->getFile() . ' (第 ' . $e->getLine() . ' 行)</p>';
-        echo '<h3>堆疊追蹤 (Trace)：</h3>';
-        echo '<pre>'. htmlspecialchars($e->getTraceAsString()) . '</pre>';
-        echo '</div>';
-        exit;
-    }
+    return $view;
 });
 /**
  * Database connection is created based in the parameters defined in the configuration file
