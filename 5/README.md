@@ -15,13 +15,16 @@ docker-project/
 │   └── nginx/
 │       └── conf.d/
 │           └── default.conf    # 你的 Nginx 虛擬主機設定檔 (fastcgi_pass app:9000;)
-├── public/                     # 網站公開根目錄 (Document Root)
-│   ├── .htaccess
-│   └── index.php               # Phalcon 程式的進入點
-├── app/                        # Phalcon 應用程式核心資料夾 (controllers, models, views 等)
-├── vendor/                     # Composer 套件資料夾
-├── composer.json               # 專案依賴管理檔
-└── composer.lock
+├── test/
+│   └── public/                 # 網站公開根目錄 (Document Root)
+│       ├── .htaccess
+│       └── index.php           # Phalcon 程式的進入點
+└── starter/
+    ├── app/                    # Phalcon 應用程式核心資料夾 (controllers, models, views 等)
+    ├── ...
+    ├── composer.json           # 專案依賴管理檔
+    ├── composer.lock
+    └── vendor/                 # Composer 套件資料夾
 ```
 
 ## WSL
@@ -54,6 +57,10 @@ sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs
 sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs:^5.23
 ```
 
+``` DevTools (v5 版本)
+sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/devtools:"^5.0@dev"
+```
+
 ``` 已有 composer.json 的情況下
 sudo docker exec -it ubuntu_phalcon_app composer install
 ```
@@ -83,4 +90,22 @@ sudo docker exec -it ubuntu_phalcon_app php -r "
 \$pdo = new PDO('mysql:host=mariadb;dbname=phalcon_db', 'phalcon_user', 'phalcon_pass');
 echo 'MariaDB 連線成功！' . PHP_EOL;
 "
+```
+
+## DevTools 工具使用
+
+``` 查看所有可用指令
+sudo docker exec -it ubuntu_phalcon_app vendor/bin/phalcon commands
+```
+
+``` 建立一個新專案骨架（Skeleton）
+sudo docker exec -it ubuntu_phalcon_app vendor/bin/phalcon project my-sub-project
+```
+
+``` 產生控制器
+sudo docker exec -it ubuntu_phalcon_app vendor/bin/phalcon controller --name=Products
+```
+
+``` 產生模型
+sudo docker exec -it ubuntu_phalcon_app vendor/bin/phalcon model --name=Users
 ```

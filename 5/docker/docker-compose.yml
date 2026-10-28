@@ -6,7 +6,7 @@ services:
     build: .
     container_name: ubuntu_phalcon_app
     volumes:
-      - .:/var/www/html  # 請對應你目前的專案路徑
+      - ./test:/var/www/html  # 請對應你目前的專案路徑
     depends_on:
       mariadb:
         condition: service_healthy  # 等到 MariaDB 健康檢查通過
@@ -26,8 +26,8 @@ services:
     volumes:
       # Nginx 設定檔資料夾對應
       - ./etc/nginx/conf.d:/etc/nginx/conf.d
-      # 讓 Nginx 也讀得到程式碼目錄（以便讀取靜態檔案如 css/js/images）
-      - .:/var/www/html
+      # 讓 Nginx 也讀得到程式碼目錄（以便讀取靜態檔案如 css/js/images）- ./專案名稱
+      - ./test:/var/www/html
 
   mariadb:
     image: mariadb:latest
