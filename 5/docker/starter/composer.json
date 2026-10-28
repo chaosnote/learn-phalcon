@@ -1,5 +1,13 @@
 {
     "require-dev": {
         "phalcon/ide-stubs": "5.23"
+    },
+    "require": {
+        "twig/twig": "^3.0"
+    },
+    "autoload": {
+        "classmap": [
+            "app/library/"
+        ]
     }
 }

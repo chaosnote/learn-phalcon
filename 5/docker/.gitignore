@@ -2,3 +2,6 @@
 /**/vendor
 
 /data/mariadb
+
+/cache
+/**/cache

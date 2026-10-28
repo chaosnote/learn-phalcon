@@ -67,6 +67,10 @@ sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs
 sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs:^5.23
 ```
 
+``` 安裝 twig
+sudo docker exec -it ubuntu_phalcon_app composer require "twig/twig:^3.0"
+```
+
 ``` 已有 composer.json 的情況下
 sudo docker exec -it ubuntu_phalcon_app composer install
 ```
