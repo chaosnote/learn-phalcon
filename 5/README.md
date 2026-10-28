@@ -48,6 +48,16 @@ sudo docker ps -a
 sudo docker compose down -v
 ```
 
+``` 安裝 ide-stubs
+sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs:5.23
+或
+sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs:^5.23
+```
+
+``` 已有 composer.json 的情況下
+sudo docker exec -it ubuntu_phalcon_app composer install
+```
+
 ## 檢查是否安裝成功
 
 ``` 透過終端機指令檢查 Phalcon 版本
