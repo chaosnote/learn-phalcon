@@ -51,6 +51,7 @@ sudo docker compose down -v
 ## 檢查是否安裝成功
 
 ``` 透過終端機指令檢查 Phalcon 版本
+sudo docker exec -it ubuntu_phalcon_app php-fpm8.5 -m | grep phalcon
 sudo docker exec -it ubuntu_phalcon_app php -r "echo 'Phalcon Version: ' . Phalcon\Version::get() . PHP_EOL;"
 ```
 
