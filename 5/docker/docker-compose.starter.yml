@@ -1,0 +1,57 @@
+# version: '3.8'
+
+services:
+  # PHP-FPM 應用程式服務
+  app:
+    build: .
+    container_name: ubuntu_phalcon_app
+    volumes:
+      - ./starter:/var/www/html  # 請對應你目前的專案路徑
+    depends_on:
+      mariadb:
+        condition: service_healthy  # 等到 MariaDB 健康檢查通過
+      redis:
+        condition: service_started   # 等到 Redis 啟動
+    # 運行 PHP-FPM 前景模式 (-F)
+    command: php-fpm8.5 -F
+
+  # Nginx 網頁伺服器服務
+  nginx:
+    image: nginx:alpine
+    container_name: ubuntu_phalcon_nginx
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      # Nginx 設定檔資料夾對應
+      - ./etc/nginx/conf.d:/etc/nginx/conf.d
+      # 讓 Nginx 也讀得到程式碼目錄（以便讀取靜態檔案如 css/js/images）- ./專案名稱
+      - ./starter:/var/www/html
+
+  mariadb:
+    image: mariadb:latest
+    container_name: ubuntu_phalcon_mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: phalcon_db
+      MYSQL_USER: phalcon_user
+      MYSQL_PASSWORD: phalcon_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
+    # MariaDB 健康檢查機制
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 10s   # 每 10 秒檢查一次
+      timeout: 5s     # 逾時時間 5 秒
+      retries: 10      # 失敗重試 5 次
+      start_period: 10s # 容器剛啟動時的緩衝等待時間
+
+  redis:
+    image: redis:alpine
+    container_name: ubuntu_phalcon_redis
+    ports:
+      - "6379:6379"

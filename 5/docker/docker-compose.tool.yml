@@ -1,0 +1,11 @@
+# version: '3.8'
+
+services:
+  app:
+    build: .
+    image: ubuntu-phalcon:latest
+    container_name: ubuntu_phalcon_app
+    volumes:
+      - .:/var/www/html
+    command: ["php-fpm8.5", "--nodaemonize"]
+    restart: always

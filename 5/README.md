@@ -36,15 +36,25 @@ wsl.exe -d Ubuntu-24.04
 ## docker 語法
 > 切換至當前`Dockerfile`目錄
 
-``` 使用 docker compose 運行
-sudo docker compose up --build -d
+``` 使用 docker compose 流程
+sudo docker compose -f docker-compose.test.yml up --build -d
+或
+sudo docker compose -f docker-compose.test.yml up -d
+sudo docker compose -f docker-compose.tool.yml up -d
+sudo docker compose -f docker-compose.starter.yml up -d
+
+確認
 sudo docker ps -a
-sudo docker compose down
+
+關閉
+sudo docker compose -f docker-compose.test.yml down
 ```
 
 ``` 編譯測試
-docker build -t ubuntu-phalcon:latest .
+sudo docker build -t ubuntu-phalcon:latest .
+
 sudo docker ps -a
+sudo docker image ls
 ```
 
 ``` 刪除舊卷
@@ -55,10 +65,6 @@ sudo docker compose down -v
 sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs:5.23
 或
 sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/ide-stubs:^5.23
-```
-
-``` DevTools (v5 版本)
-sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/devtools:"^5.0@dev"
 ```
 
 ``` 已有 composer.json 的情況下
@@ -94,12 +100,19 @@ echo 'MariaDB 連線成功！' . PHP_EOL;
 
 ## DevTools 工具使用
 
+``` DevTools (v5 版本)
+sudo docker exec -it ubuntu_phalcon_app composer require --dev phalcon/devtools:"^5.0@dev"
+```
+
 ``` 查看所有可用指令
 sudo docker exec -it ubuntu_phalcon_app vendor/bin/phalcon commands
 ```
 
 ``` 建立一個新專案骨架（Skeleton）
 sudo docker exec -it ubuntu_phalcon_app vendor/bin/phalcon project my-sub-project
+
+例: starter
+sudo docker exec -it ubuntu_phalcon_app vendor/bin/phalcon project starter
 ```
 
 ``` 產生控制器
