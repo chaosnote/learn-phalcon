@@ -5,6 +5,9 @@ use Phalcon\Di\FactoryDefault;
 
 error_reporting(E_ALL);
 
+// 引入 Composer 的 autoload，讓所有套件與命名空間生效
+require_once __DIR__ . '/../vendor/autoload.php';
+
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
